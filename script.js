@@ -59,11 +59,11 @@ const selectCity = (event, input, list) => {
 }
 
 const renderCheapDay = (cheapTicket) => {
-
+ console.log(cheapTicket);
 };
 
 const renderCheapYear = (cheapTickets) => {
-
+  console.log(cheapTickets);
 };
 
 const renderCheap = (data, date) => {
@@ -112,7 +112,7 @@ formSearch.addEventListener('submit', (event) => {
 
   // const requestData2 = '?depart_date=' + formData.when + '&origin=' + formData.from + '&destination=' + formData.to + '&oneway=true&token=' + API_KEY;
   
-  getData(calendar + requestData, (response) => {
+  getData(proxy + calendar + requestData, (response) => {
     renderCheap(response, formData.when);
   });
 })
