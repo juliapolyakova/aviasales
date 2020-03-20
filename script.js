@@ -58,6 +58,26 @@ const selectCity = (event, input, list) => {
   }
 }
 
+const renderCheapDay = (cheapTicket) => {
+
+};
+
+const renderCheapYear = (cheapTickets) => {
+
+};
+
+const renderCheap = (data, date) => {
+  const cheapTicketYear = JSON.parse(data).best_prices;
+
+  const cheapTicketDay = cheapTicketYear.filter((item) => {
+    return item.depart_date === date;
+  });
+
+  renderCheapDay(cheapTicketDay);
+  renderCheapYear(cheapTicketYear);
+
+}
+
 // обработчики событий
 
 inputCitiesFrom.addEventListener('input', () => {
@@ -76,6 +96,27 @@ dropdownCitiesTo.addEventListener('click', (event) => {
   selectCity(event, inputCitiesTo, dropdownCitiesTo);
 });
 
+formSearch.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  const cityFrom = city.find((item) => inputCitiesFrom.value === item.name);
+  const cityTo = city.find((item) => inputCitiesTo.value === item.name);
+  
+  const formData = {
+    from: cityFrom.code,
+    to: cityTo.code,
+    when: inputDateDepart.value,
+  };
+
+  const requestData = `?depart_date=${formData.when}&origin=${formData.from}&destination=${formData.to}&oneway=true`;
+
+  // const requestData2 = '?depart_date=' + formData.when + '&origin=' + formData.from + '&destination=' + formData.to + '&oneway=true&token=' + API_KEY;
+  
+  getData(calendar + requestData, (response) => {
+    renderCheap(response, formData.when);
+  });
+})
+
 
 // получение данных о городах (убирает пустые поля в name)
 getData(proxy + citiesApi, (data) => {
@@ -83,7 +124,8 @@ getData(proxy + citiesApi, (data) => {
 });
 
 // получение данных о рейсах Екатеринбург - Калининград
-getData(proxy + calendar + '?origin=SVX&destination=KGD&depart_date=2020-05-25&one_way=false', (data) => {
-  console.log(JSON.parse(data).current_depart_date_prices);
+// getData(proxy + calendar + '?depart_date=2020-05-25&origin=SVX&destination=KGD&one_way=true&token='+ API_KEY, (data) => {
+//   console.log(JSON.parse(data).best_prices.filter(item => item.depart_date === '2020-05-25'));
 
-})
+// })
+
